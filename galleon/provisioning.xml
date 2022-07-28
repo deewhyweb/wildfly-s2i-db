@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<installation xmlns="urn:jboss:galleon:provisioning:3.0">
+    <feature-pack location="org.wildfly:wildfly-datasources-galleon-pack:2.2.3
+">
+        <default-configs inherit="false"/>
+        <packages inherit="false"/>
+    </feature-pack>
+</installation>
