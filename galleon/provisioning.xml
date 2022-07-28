@@ -4,15 +4,10 @@
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
-    <feature-pack location="org.wildfly:wildfly-datasources-galleon-pack:2.2.2.Final">
-        <default-configs inherit="false"/>
-        <packages inherit="false"/>
-    </feature-pack>
     <config model="standalone" name="standalone.xml">
         <layers>
             <include name="jaxrs-server"/>
             <include name="microprofile-health"/>
-            <include name="postgresql-default-datasource"/>
         </layers>
     </config>
     <options>
