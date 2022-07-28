@@ -4,7 +4,7 @@
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
-    <feature-pack location="wildfly@maven(org.wildfly.wildfly-datasources-galleon-pack):Final#2.2.1">
+    <feature-pack location="org.wildfly:wildfly-datasources-galleon-pack:2.2.2.Final">
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
