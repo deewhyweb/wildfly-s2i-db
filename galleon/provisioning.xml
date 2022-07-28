@@ -5,4 +5,11 @@
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
+    <config model="standalone" name="standalone.xml">5
+        <layers>
+            <include name="jaxrs-server"/>
+            <include name="microprofile-health"/>
+            <include name="postgresql-default-datasource"/>
+        </layers>
+    </config>
 </installation>
