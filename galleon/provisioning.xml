@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <installation xmlns="urn:jboss:galleon:provisioning:3.0">
-    <feature-pack location="eap-s2i@maven(org.jboss.universe:s2i-universe)">
+    <feature-pack location="org.jboss.universe:community-universe:1.2.0.Final">
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
-    <feature-pack location="org.wildfly:wildfly-datasources-galleon-pack-common:2.2.2.Final">
+    <feature-pack location="org.wildfly:wildfly-datasources-galleon-pack:2.2.2.Final">
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
