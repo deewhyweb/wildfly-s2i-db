@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <installation xmlns="urn:jboss:galleon:provisioning:3.0">
-    <feature-pack location="org.jboss.universe:community-universe:1.2.0.Final">
+    <feature-pack location="eap-s2i@maven(org.jboss.universe:s2i-universe)">
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
@@ -15,4 +15,7 @@
             <include name="postgresql-default-datasource"/>
         </layers>
     </config>
+    <options>
+        <option name="optional-packages" value="passive+"/>
+    </options>
 </installation>
