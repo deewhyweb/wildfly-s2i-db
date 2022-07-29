@@ -1,60 +1,76 @@
 build:
-    bootableJar:
-      builderImage: 'registry.access.redhat.com/ubi8/openjdk-11:latest'
-    enabled: true
-    env:
-      - name: MAVEN_ARGS_APPEND
-        value: '-Dcom.redhat.xpaas.repo.jbossorg'
-      - name: CUSTOM_INSTALL_DIRECTORIES
-        value: extensions
-    mode: s2i
-    output:
-      kind: ImageStreamTag
-    s2i:
-      jdk: '11'
+  enabled: true
+  env:
+    - name: CUSTOM_INSTALL_DIRECTORIES
+      value: extensions
+  mode: s2i
+  output:
+    kind: ImageStreamTag
+  ref: legacy
+  s2i:
+    amd64:
       jdk11:
-        builderImage: registry.redhat.io/jboss-eap-7/eap-xp4-openjdk11-openshift-rhel8
-        runtimeImage: registry.redhat.io/jboss-eap-7/eap-xp4-openjdk11-runtime-openshift-rhel8
-      version: latest
-    uri: 'https://github.com/deewhyweb/wildfly-s2i-db.git'
+        builderImage: registry.redhat.io/jboss-eap-7/eap74-openjdk11-openshift-rhel8
+        runtimeImage: registry.redhat.io/jboss-eap-7/eap74-openjdk11-runtime-openshift-rhel8
+      jdk8:
+        builderImage: registry.redhat.io/jboss-eap-7/eap74-openjdk8-openshift-rhel7
+        runtimeImage: registry.redhat.io/jboss-eap-7/eap74-openjdk8-runtime-openshift-rhel7
+    arch: amd64
+    galleonLayers:
+      - jaxrs-server
+    jdk: '11'
+    version: latest
+  uri: 'https://github.com/deewhyweb/wildfly-s2i-db.git'
 deploy:
+  enabled: true
+  env:
+    - name: TEST_DATABASE
+      valueFrom:
+        secretKeyRef:
+          key: database-name
+          name: postgresql
+    - name: TEST_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: database-password
+          name: postgresql
+    - name: TEST_USERNAME
+      valueFrom:
+        secretKeyRef:
+          key: database-user
+          name: postgresql
+    - name: DATASOURCES
+      value: TEST
+    - name: TEST_DRIVER
+      value: postgresql
+    - name: TEST_JNDI
+      value: 'java:/jdbc/postgresql'
+    - name: TEST_NAME
+      value: postgresql
+    - name: TEST_URL
+      value: 'jdbc:postgresql://postgresql:5432/demodb'
+    - name: TEST_NONXA
+      value: 'true'
+  livenessProbe:
+    exec:
+      command:
+        - /bin/bash
+        - '-c'
+        - /opt/eap/bin/livenessProbe.sh
+    initialDelaySeconds: 60
+  readinessProbe:
+    exec:
+      command:
+        - /bin/bash
+        - '-c'
+        - /opt/eap/bin/readinessProbe.sh
+    initialDelaySeconds: 10
+  replicas: 1
+  route:
     enabled: true
-    env:
-      - name: POSTGRESQL_DATABASE
-        valueFrom:
-          secretKeyRef:
-            key: database-name
-            name: dbserver
-      - name: POSTGRESQL_USER
-        valueFrom:
-          secretKeyRef:
-            key: database-user
-            name: dbserver
-      - name: POSTGRESQL_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            key: database-password
-            name: dbserver
-    envFrom:
-      - configMapRef:
-          name: eap-config
-    livenessProbe:
-      httpGet:
-        path: /health/live
-        port: admin
-      initialDelaySeconds: 60
-    readinessProbe:
-      httpGet:
-        path: /health/ready
-        port: admin
-      initialDelaySeconds: 60
-    replicas: 1
-    route:
+    tls:
       enabled: true
-      tls:
-        enabled: true
-        insecureEdgeTerminationPolicy: Redirect
-        termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
 image:
-    tag: latest
-  
+  tag: latest
