@@ -1,0 +1,60 @@
+build:
+    bootableJar:
+      builderImage: 'registry.access.redhat.com/ubi8/openjdk-11:latest'
+    enabled: true
+    env:
+      - name: MAVEN_ARGS_APPEND
+        value: '-Dcom.redhat.xpaas.repo.jbossorg'
+      - name: CUSTOM_INSTALL_DIRECTORIES
+        value: extensions
+    mode: s2i
+    output:
+      kind: ImageStreamTag
+    s2i:
+      jdk: '11'
+      jdk11:
+        builderImage: registry.redhat.io/jboss-eap-7/eap-xp4-openjdk11-openshift-rhel8
+        runtimeImage: registry.redhat.io/jboss-eap-7/eap-xp4-openjdk11-runtime-openshift-rhel8
+      version: latest
+    uri: 'https://github.com/deewhyweb/wildfly-s2i-db.git'
+deploy:
+    enabled: true
+    env:
+      - name: POSTGRESQL_DATABASE
+        valueFrom:
+          secretKeyRef:
+            key: database-name
+            name: dbserver
+      - name: POSTGRESQL_USER
+        valueFrom:
+          secretKeyRef:
+            key: database-user
+            name: dbserver
+      - name: POSTGRESQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: database-password
+            name: dbserver
+    envFrom:
+      - configMapRef:
+          name: eap-config
+    livenessProbe:
+      httpGet:
+        path: /health/live
+        port: admin
+      initialDelaySeconds: 60
+    readinessProbe:
+      httpGet:
+        path: /health/ready
+        port: admin
+      initialDelaySeconds: 60
+    replicas: 1
+    route:
+      enabled: true
+      tls:
+        enabled: true
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+image:
+    tag: latest
+  
