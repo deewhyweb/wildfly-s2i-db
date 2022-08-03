@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.util.List;
+import org.eclipse.microprofile.metrics.annotation.Counted;
 
 @Path("developers")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -26,6 +27,7 @@ public class DevelopersResource {
     @PersistenceContext
     private EntityManager em;
 
+    @Counted(name = "developersAll", displayName="Calls to developers getAll", description = "How many calls have been since startup.")
     @GET
     public Response getAll() {
         final List<Developer> developers = em.createQuery("SELECT d FROM Developer d").getResultList();
