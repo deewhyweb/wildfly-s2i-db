@@ -15,9 +15,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jakarta.jakartaee-api.version>8.0.0</jakarta.jakartaee-api.version>
-        <microprofile.microprofile-health-api>3.0</microprofile.microprofile-health-api>
     </properties>
+    <dependencyManagement>
 
+        <dependencies> 
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-xp-microprofile</artifactId>
+                <version>3.0.0.GA</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>jakarta.platform</groupId>
@@ -28,7 +37,6 @@
         <dependency>
             <groupId>org.eclipse.microprofile.health</groupId>
             <artifactId>microprofile-health-api</artifactId>
-            <version>${microprofile.microprofile-health-api}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
