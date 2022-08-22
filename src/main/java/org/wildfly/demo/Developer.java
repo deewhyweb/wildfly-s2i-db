@@ -6,6 +6,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
 
 @Entity
 @Table(name = "TM_DEVELOPERS")
@@ -50,4 +54,11 @@ public class Developer implements Serializable {
         sb.append('}');
         return sb.toString();
     }
+
+       public void ejbRemove() throws EJBException, RemoteException {
+      
+   }
+   public void ejbActivate() throws EJBException, RemoteException {
+   
+   }
 }
